@@ -30,6 +30,24 @@
   "confidence": "Téléphone : conseiller petite enfance People&Baby (pré-inscription), pas la crèche directement"
  },
  {
+  "name": "Le Lagon des Ours (ABC Puériculture)",
+  "type": "Associative",
+  "address": "13 Rue des Bluets 75011 Paris",
+  "address_src": "13 rue des Bluets, Paris 11e",
+  "lat": 48.864605,
+  "lon": 2.382357,
+  "dist": 213,
+  "phones": [
+   "01 48 06 52 93"
+  ],
+  "emails": [
+   "lagondesours@abcpuericulture.com"
+  ],
+  "source": "abcpuericulture.com + mairie11.paris.fr",
+  "source_url": "https://www.abcpuericulture.com/creches-collectives-paris/le-lagon-des-ours/",
+  "confidence": "Liste officielle mairie du 11e + site du gestionnaire"
+ },
+ {
   "name": "Crèche associative pour la diversité culturelle et sociale \"l'enfance en couleurs\"",
   "type": "Associative",
   "address": "10 Rue Guillaume Bertrand 75011 Paris",
@@ -42,7 +60,8 @@
    "06 26 43 19 91"
   ],
   "emails": [
-   "enfanceencouleurs@gmail.com"
+   "enfanceencouleurs@gmail.com",
+   "assoc.enfanceencouleur@laposte.net"
   ],
   "source": "paris.fr",
   "source_url": "https://www.paris.fr/lieux/creche-associative-pour-la-diversite-culturelle-et-sociale-l-enfance-en-couleurs-19940",
@@ -60,9 +79,9 @@
    "01 48 07 24 80"
   ],
   "emails": [],
-  "source": "evous.fr (annuaire local)",
-  "source_url": "https://www.evous.fr/paris/11eme-arrondissement/Guide-Paris-11e/Vie-pratique-Paris-11e/Creches-et-Halte-Garderies-Paris-11e/Les-creches-collectives-municipales-Paris-11e-adresses-1192167.html",
-  "confidence": "Fiche paris.fr retirée : téléphone issu d'un annuaire tiers, à vérifier"
+  "source": "mairie11.paris.fr + evous.fr",
+  "source_url": "https://mairie11.paris.fr/pages/les-structures-municipales-9812",
+  "confidence": "Adresse confirmée par la mairie du 11e ; téléphone issu d'un annuaire tiers (evous.fr), à vérifier"
  },
  {
   "name": "Crèche municipale Saint-Maur (56 rue Saint-Maur)",
@@ -76,9 +95,9 @@
    "01 48 07 50 95"
   ],
   "emails": [],
-  "source": "evous.fr (annuaire local)",
-  "source_url": "https://www.evous.fr/paris/11eme-arrondissement/Guide-Paris-11e/Vie-pratique-Paris-11e/Creches-et-Halte-Garderies-Paris-11e/Les-creches-collectives-municipales-Paris-11e-adresses-1192167.html",
-  "confidence": "Fiche paris.fr retirée : téléphone issu d'un annuaire tiers, à vérifier"
+  "source": "mairie11.paris.fr + evous.fr",
+  "source_url": "https://mairie11.paris.fr/pages/les-structures-municipales-9812",
+  "confidence": "Adresse confirmée par la mairie du 11e ; téléphone issu d'un annuaire tiers (evous.fr), à vérifier"
  },
  {
   "name": "Les Nouvelles Crèches – Jean-Pierre Timbaud",
@@ -113,7 +132,7 @@
  {
   "name": "Halte-garderie municipale Jean-Pierre Timbaud",
   "type": "Halte-garderie",
-  "address": "114 Rue Jean-Pierre Timbaud 75011 Paris",
+  "address": "110-114 rue Jean-Pierre Timbaud 75011 Paris",
   "address_src": "114 rue Jean-Pierre Timbaud, Paris 11e",
   "lat": 48.868407,
   "lon": 2.379733,
@@ -122,9 +141,9 @@
    "01 55 28 30 45"
   ],
   "emails": [],
-  "source": "evous.fr (annuaire local)",
-  "source_url": "https://www.evous.fr/paris/11eme-arrondissement/Guide-Paris-11e/Vie-pratique-Paris-11e/Creches-et-Halte-Garderies-Paris-11e/Haltes-garderies-municipales-Paris-11e-adresses-telephone-1141055.html",
-  "confidence": "Fiche paris.fr retirée : ce numéro pourrait être celui de la PMI voisine, à vérifier"
+  "source": "mairie11.paris.fr",
+  "source_url": "https://mairie11.paris.fr/pages/les-structures-municipales-9812#les-haltes-garderies-municipales",
+  "confidence": "Liste officielle mairie du 11e"
  },
  {
   "name": "Crèche municipale Ménilmontant (130 boulevard Ménilmontant)",
@@ -261,6 +280,40 @@
   "confidence": "Fiche officielle paris.fr"
  },
  {
+  "name": "Square Bande",
+  "type": "Parentale",
+  "address": "5 Rue du Général Guilhem 75011 Paris",
+  "address_src": "5 rue du Général Guilhem, Paris 11e",
+  "lat": 48.86122,
+  "lon": 2.380117,
+  "dist": 469,
+  "phones": [
+   "01 47 00 50 78"
+  ],
+  "emails": [],
+  "source": "mairie11.paris.fr",
+  "source_url": "https://mairie11.paris.fr/pages/les-structures-associatives-9813",
+  "confidence": "Liste officielle mairie du 11e"
+ },
+ {
+  "name": "Crescendo Spinoza",
+  "type": "Associative",
+  "address": "81 Boulevard de Ménilmontant 75011 Paris",
+  "address_src": "81 boulevard de Ménilmontant, Paris 11e",
+  "lat": 48.863776,
+  "lon": 2.386135,
+  "dist": 503,
+  "phones": [
+   "01 53 02 93 41"
+  ],
+  "emails": [
+   "creche.spinoza@groupe-sos.org"
+  ],
+  "source": "mairie11.paris.fr",
+  "source_url": "https://mairie11.paris.fr/pages/les-structures-associatives-9813",
+  "confidence": "Liste officielle mairie du 11e"
+ },
+ {
   "name": "Micro-crèche Babilou Paris Pasteur",
   "type": "Privée / micro-crèche",
   "address": "6 Rue Pasteur 75011 Paris",
@@ -273,6 +326,20 @@
   "source": "Babilou",
   "source_url": "https://www.babilou.fr/ile-de-france/paris/paris11",
   "confidence": "Juste au-delà de 500 m ; contact via le site Babilou"
+ },
+ {
+  "name": "Crèche municipale Vaucouleurs – Crescendo",
+  "type": "Municipale",
+  "address": "21 Rue de Vaucouleurs 75011 Paris",
+  "address_src": "21 rue de Vaucouleurs, Paris 11e",
+  "lat": 48.869899,
+  "lon": 2.37692,
+  "dist": 538,
+  "phones": [],
+  "emails": [],
+  "source": "mairie11.paris.fr",
+  "source_url": "https://mairie11.paris.fr/pages/les-structures-municipales-9812",
+  "confidence": "Liste officielle mairie du 11e ; pas de téléphone direct publié (inscription via la mairie)"
  },
  {
   "name": "Crèche associative mosaïque l'atelier des enfants",
@@ -379,6 +446,24 @@
   "confidence": "Fiche officielle paris.fr"
  },
  {
+  "name": "L'Atelier des Ours (ABC Puériculture)",
+  "type": "Associative",
+  "address": "23 Rue Ramponeau 75020 Paris",
+  "address_src": "23 rue Ramponeau, Paris 20e",
+  "lat": 48.871308,
+  "lon": 2.379983,
+  "dist": 654,
+  "phones": [
+   "01 42 54 10 69"
+  ],
+  "emails": [
+   "atelierdesours@abcpuericulture.com"
+  ],
+  "source": "abcpuericulture.com",
+  "source_url": "https://www.abcpuericulture.com/creches-collectives-paris/latelier-des-ours/",
+  "confidence": "Site du gestionnaire (fiche paris.fr retirée)"
+ },
+ {
   "name": "Crèche municipale Robert Houdin",
   "type": "Municipale",
   "address": "16 Rue Robert-Houdin 75011 Paris",
@@ -427,6 +512,22 @@
   "source": "paris.fr",
   "source_url": "https://www.paris.fr/lieux/creche-municipale-passage-de-l-asile-crescendo-19909",
   "confidence": "Fiche officielle paris.fr"
+ },
+ {
+  "name": "Crèche municipale Servan",
+  "type": "Municipale",
+  "address": "9 Rue Servan 75011 Paris",
+  "address_src": "9 rue Servan, Paris 11e",
+  "lat": 48.85943,
+  "lon": 2.383781,
+  "dist": 730,
+  "phones": [
+   "01 48 07 01 12"
+  ],
+  "emails": [],
+  "source": "mairie11.paris.fr + evous.fr",
+  "source_url": "https://mairie11.paris.fr/pages/les-structures-municipales-9812",
+  "confidence": "Adresse confirmée par la mairie du 11e ; téléphone issu d'un annuaire tiers (evous.fr), à vérifier"
  },
  {
   "name": "Crèche municipale Dénoyez - La Maison Bleue",
