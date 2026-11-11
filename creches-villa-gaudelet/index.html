@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Crèches autour de la Villa Gaudelet (Paris 11e)</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<style>
+  :root { --bg:#f7f7f5; --card:#fff; --ink:#1f2328; --muted:#656d76; --line:#e3e3e0;
+          --municipale:#2a6fdb; --associative:#1a9a6c; --parentale:#c27c0e; --halte:#8b5cf6; --privee:#d6336c; }
+  * { box-sizing:border-box; }
+  body { margin:0; font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif; color:var(--ink); background:var(--bg); }
+  header { padding:14px 20px; border-bottom:1px solid var(--line); background:var(--card); }
+  header h1 { margin:0; font-size:20px; }
+  header p { margin:4px 0 0; color:var(--muted); font-size:13px; }
+  .layout { display:grid; grid-template-columns:420px 1fr; height:calc(100vh - 70px); }
+  aside { overflow:auto; border-right:1px solid var(--line); background:var(--card); }
+  #map { height:100%; }
+  .controls { padding:12px 16px; border-bottom:1px solid var(--line); position:sticky; top:0; background:var(--card); z-index:2; }
+  .controls label { font-size:13px; }
+  .row { display:flex; gap:8px; align-items:center; flex-wrap:wrap; margin:6px 0; }
+  .chip { display:inline-flex; align-items:center; gap:5px; padding:3px 8px; border:1px solid var(--line); border-radius:999px; cursor:pointer; user-select:none; font-size:12px; }
+  .dot { width:10px; height:10px; border-radius:50%; display:inline-block; }
+  .count { font-size:13px; color:var(--muted); }
+  button { font:inherit; font-size:12px; padding:4px 10px; border:1px solid var(--line); background:#fff; border-radius:6px; cursor:pointer; }
+  ul { list-style:none; margin:0; padding:0; }
+  li { padding:12px 16px; border-bottom:1px solid var(--line); cursor:pointer; }
+  li:hover, li.active { background:#f1f5ff; }
+  li h3 { margin:0 0 3px; font-size:14px; }
+  .meta { font-size:12px; color:var(--muted); }
+  .contacts { font-size:13px; margin-top:4px; }
+  .contacts a { color:var(--municipale); text-decoration:none; }
+  .warn { font-size:11px; color:#9a6700; background:#fff8c5; border-radius:4px; padding:2px 6px; display:inline-block; margin-top:4px; }
+  .ok { font-size:11px; color:#1a7f37; }
+  .badge { font-size:11px; color:#fff; border-radius:4px; padding:1px 6px; margin-right:6px; }
+  .out { opacity:.55; }
+  footer { padding:12px 16px; font-size:11px; color:var(--muted); }
+  @media (max-width: 800px) { .layout { grid-template-columns:1fr; grid-template-rows:45vh auto; height:auto; } #map { height:45vh; order:-1; } aside { border-right:none; } }
+</style>
+</head>
+<body>
+<header>
+  <h1>Crèches autour de la Villa Gaudelet</h1>
+  <p>Villa Gaudelet, 75011 Paris · rayon par défaut 500 m · données collectées le 11/11/2026</p>
+</header>
+<div class="layout">
+  <aside>
+    <div class="controls">
+      <div class="row">
+        <label for="radius">Rayon : <strong id="rv">500</strong> m</label>
+        <input id="radius" type="range" min="200" max="800" step="50" value="500" style="flex:1">
+      </div>
+      <div class="row" id="types"></div>
+      <div class="row">
+        <label><input type="checkbox" id="onlyContact"> Avec téléphone ou e-mail uniquement</label>
+      </div>
+      <div class="row" style="justify-content:space-between">
+        <span class="count" id="count"></span>
+        <button id="csv">Exporter CSV</button>
+      </div>
+    </div>
+    <ul id="list"></ul>
+    <footer>
+      Sources : fiches « lieux » de <a href="https://www.paris.fr">paris.fr</a> (crèches municipales, associatives, parentales, haltes-garderies),
+      annuaires des réseaux privés (Babilou, People&amp;Baby), registre SIRENE, evous.fr.
+      Géocodage : Base Adresse Nationale. Distances à vol d'oiseau depuis le centre de la Villa Gaudelet.
+      <br><br>
+      Les places disponibles ne sont publiées nulle part : pour les crèches municipales et associatives conventionnées, la demande passe par le
+      Relais Informations Familles de la mairie du 11e (01 53 27 11 11) ou du 20e. Les crèches privées s'inscrivent directement.
+    </footer>
+  </aside>
+  <div id="map"></div>
+</div>
+<script>
+const DATA = [{"name": "Micro-crèche (12 villa Gaudelet) – non confirmée", "type": "Privée / micro-crèche", "address": "12 Villa Gaudelet 75011 Paris", "address_src": "12 villa Gaudelet, Paris 11e", "lat": 48.865376, "lon": 2.379707, "dist": 6, "phones": [], "emails": [], "source": "trouverecole.fr (donnée SIRENE)", "source_url": "https://trouverecole.fr/creches/micro-creche-paris-800071/", "confidence": "Une seule source (code NAF micro-crèche, 2010). Le 12 villa Gaudelet héberge aussi le SESSAD Le Passage : existence à vérifier"}, {"name": "Micro-crèche Les Explorateurs de Ménilmontant (Les Bébés Explorateurs)", "type": "Privée / micro-crèche", "address": "147 Rue Oberkampf 75011 Paris", "address_src": "147 rue Oberkampf, Paris 11e", "lat": 48.866737, "lon": 2.381427, "dist": 191, "phones": ["07 67 82 17 51"], "emails": [], "source": "People&Baby / Babilou / annuaire-entreprises", "source_url": "https://www.lesbebesexplorateurs.com/creche-paris-75011-menilmontant", "confidence": "Téléphone : conseiller petite enfance People&Baby (pré-inscription), pas la crèche directement"}, {"name": "Crèche associative pour la diversité culturelle et sociale \"l'enfance en couleurs\"", "type": "Associative", "address": "10 Rue Guillaume Bertrand 75011 Paris", "address_src": "6-10 rue Guillaume Bertrand , Paris 11e", "lat": 48.86341, "lon": 2.380192, "dist": 227, "phones": ["01 47 00 87 46", "06 26 43 19 91"], "emails": ["enfanceencouleurs@gmail.com"], "source": "paris.fr", "source_url": "https://www.paris.fr/lieux/creche-associative-pour-la-diversite-culturelle-et-sociale-l-enfance-en-couleurs-19940", "confidence": "Fiche officielle paris.fr"}, {"name": "Crèche municipale Saint-Maur (108-110 rue Saint-Maur)", "type": "Municipale", "address": "108 Rue Saint-Maur 75011 Paris", "address_src": "108 rue Saint-Maur, Paris 11e", "lat": 48.866557, "lon": 2.376707, "dist": 254, "phones": ["01 48 07 24 80"], "emails": [], "source": "evous.fr (annuaire local)", "source_url": "https://www.evous.fr/paris/11eme-arrondissement/Guide-Paris-11e/Vie-pratique-Paris-11e/Creches-et-Halte-Garderies-Paris-11e/Les-creches-collectives-municipales-Paris-11e-adresses-1192167.html", "confidence": "Fiche paris.fr retirée : téléphone issu d'un annuaire tiers, à vérifier"}, {"name": "Crèche municipale Saint-Maur (56 rue Saint-Maur)", "type": "Municipale", "address": "56 Rue Saint-Maur 75011 Paris", "address_src": "56 rue Saint-Maur, Paris 11e", "lat": 48.862865, "lon": 2.379544, "dist": 286, "phones": ["01 48 07 50 95"], "emails": [], "source": "evous.fr (annuaire local)", "source_url": "https://www.evous.fr/paris/11eme-arrondissement/Guide-Paris-11e/Vie-pratique-Paris-11e/Creches-et-Halte-Garderies-Paris-11e/Les-creches-collectives-municipales-Paris-11e-adresses-1192167.html", "confidence": "Fiche paris.fr retirée : téléphone issu d'un annuaire tiers, à vérifier"}, {"name": "Les Nouvelles Crèches – Jean-Pierre Timbaud", "type": "Privée / micro-crèche", "address": "77 Rue Jean-Pierre Timbaud 75011 Paris", "address_src": "77 rue Jean-Pierre Timbaud, Paris 11e", "lat": 48.867657, "lon": 2.377057, "dist": 315, "phones": [], "emails": [], "source": "Babilou (annuaire réseau) / SIRENE", "source_url": "https://www.babilou.fr/ile-de-france/paris/paris11", "confidence": "Adresse confirmée ; aucun contact public trouvé (siège : 13 rue du Chemin Vert)"}, {"name": "Crèche municipale Jean-Pierre Timbaud (81 bis rue Jean-Pierre Timbaud)", "type": "Municipale", "address": "81B Rue Jean-Pierre Timbaud 75011 Paris", "address_src": "81 bis rue Jean-Pierre Timbaud, Paris 11e", "lat": 48.867998, "lon": 2.377769, "dist": 319, "phones": ["01 47 00 38 93"], "emails": [], "source": "paris.fr", "source_url": "https://www.paris.fr/lieux/creche-municipale-jean-pierre-timbaud-81-bis-rue-jean-pierre-timbaud-2188", "confidence": "Fiche officielle paris.fr"}, {"name": "Halte-garderie municipale Jean-Pierre Timbaud", "type": "Halte-garderie", "address": "114 Rue Jean-Pierre Timbaud 75011 Paris", "address_src": "114 rue Jean-Pierre Timbaud, Paris 11e", "lat": 48.868407, "lon": 2.379733, "dist": 331, "phones": ["01 55 28 30 45"], "emails": [], "source": "evous.fr (annuaire local)", "source_url": "https://www.evous.fr/paris/11eme-arrondissement/Guide-Paris-11e/Vie-pratique-Paris-11e/Creches-et-Halte-Garderies-Paris-11e/Haltes-garderies-municipales-Paris-11e-adresses-telephone-1141055.html", "confidence": "Fiche paris.fr retirée : ce numéro pourrait être celui de la PMI voisine, à vérifier"}, {"name": "Crèche municipale Ménilmontant (130 boulevard Ménilmontant)", "type": "Municipale", "address": "130 Boulevard de Ménilmontant 75020 Paris", "address_src": "130 boulevard de Ménilmontant, Paris 20e", "lat": 48.86607, "lon": 2.384281, "dist": 340, "phones": ["01 58 53 50 55"], "emails": [], "source": "paris.fr", "source_url": "https://www.paris.fr/lieux/creche-municipale-menilmontant-130-boulevard-menilmontant-3847", "confidence": "Fiche officielle paris.fr"}, {"name": "Crèche associative Heikhal Menahem", "type": "Associative", "address": "110 Boulevard de Ménilmontant 75020 Paris", "address_src": "110 boulevard de Ménilmontant, Paris 20e", "lat": 48.865512, "lon": 2.384909, "dist": 379, "phones": [], "emails": [], "source": "paris.fr (fiche retirée)", "source_url": "https://www.paris.fr/lieux/creche-associative-heikhal-menahem-3570", "confidence": "Adresse 110-114 bd de Ménilmontant ; aucun contact trouvé"}, {"name": "Mini-crèche coccinelle", "type": "Associative", "address": "4 Square du Nouveau Belleville 75020 Paris", "address_src": "4 square du Nouveau Belleville, Paris 20e", "lat": 48.868472, "lon": 2.382738, "dist": 403, "phones": ["01 43 58 71 26"], "emails": ["nafissatou.sodjinou@groupe-sos.org"], "source": "paris.fr", "source_url": "https://www.paris.fr/lieux/mini-creche-coccinelle-3678", "confidence": "Fiche officielle paris.fr"}, {"name": "Crèche associative ganone yad", "type": "Associative", "address": "145 Rue Saint-Maur 75011 Paris", "address_src": "145 rue Saint-Maur, Paris 11e", "lat": 48.86784, "lon": 2.375317, "dist": 419, "phones": ["01 48 05 44 15"], "emails": ["ganone145@hotmail.fr"], "source": "paris.fr", "source_url": "https://www.paris.fr/lieux/creche-associative-ganone-yad-3520", "confidence": "Fiche officielle paris.fr"}, {"name": "Crèche associative saint ambroise", "type": "Associative", "address": "19 Rue Pasteur 75011 Paris", "address_src": "19 rue Pasteur, Paris 11e", "lat": 48.862484, "lon": 2.37598, "dist": 427, "phones": ["01 56 98 06 25"], "emails": ["saintambroise@fondationbellan.org"], "source": "paris.fr", "source_url": "https://www.paris.fr/lieux/creche-associative-saint-ambroise-16686", "confidence": "Fiche officielle paris.fr"}, {"name": "Halte-garderie associative Suzanne et David Lévy", "type": "Halte-garderie", "address": "64 Boulevard de Belleville 75020 Paris", "address_src": "64, Boulevard de Belleville, Paris 20e", "lat": 48.869431, "lon": 2.380678, "dist": 450, "phones": ["01 44 62 13 12"], "emails": ["halte-garderie@casip-cojasor.fr"], "source": "paris.fr", "source_url": "https://www.paris.fr/lieux/halte-garderie-associative-suzanne-et-david-levy-3643", "confidence": "Fiche officielle paris.fr"}, {"name": "Crèche municipale Monplaisir", "type": "Municipale", "address": "7 Passage Monplaisir 75020 Paris", "address_src": "7 passage Monplaisir, Paris 20e", "lat": 48.865777, "lon": 2.385937, "dist": 456, "phones": ["01 43 66 92 24"], "emails": [], "source": "paris.fr", "source_url": "https://www.paris.fr/lieux/creche-municipale-monplaisir-2013", "confidence": "Fiche officielle paris.fr"}, {"name": "Crèche municipale Couronnes", "type": "Municipale", "address": "8 Rue des Couronnes 75020 Paris", "address_src": "8 rue des Couronnes, Paris 20e", "lat": 48.869402, "lon": 2.381728, "dist": 465, "phones": ["01 43 66 92 56"], "emails": [], "source": "paris.fr", "source_url": "https://www.paris.fr/lieux/creche-municipale-couronnes-2016", "confidence": "Fiche officielle paris.fr"}, {"name": "Micro-crèche Babilou Paris Pasteur", "type": "Privée / micro-crèche", "address": "6 Rue Pasteur 75011 Paris", "address_src": "6 rue Pasteur, Paris 11e", "lat": 48.861914, "lon": 2.375025, "dist": 521, "phones": [], "emails": [], "source": "Babilou", "source_url": "https://www.babilou.fr/ile-de-france/paris/paris11", "confidence": "Juste au-delà de 500 m ; contact via le site Babilou"}, {"name": "Crèche associative mosaïque l'atelier des enfants", "type": "Associative", "address": "21 Rue de la Folie-Méricourt 75011 Paris", "address_src": "21 rue de la Folie Méricourt, Paris 11e", "lat": 48.862485, "lon": 2.37351, "dist": 561, "phones": ["01 43 57 93 37"], "emails": ["mosaique-l-atelier-des-enfants@orange.fr"], "source": "paris.fr", "source_url": "https://www.paris.fr/lieux/creche-associative-mosaique-l-atelier-des-enfants-1949", "confidence": "Fiche officielle paris.fr"}, {"name": "Crèche associative petit concept", "type": "Associative", "address": "18 Rue de l'Orillon 75011 Paris", "address_src": "18 rue de L'orillon, Paris 11e", "lat": 48.869929, "lon": 2.375622, "dist": 583, "phones": ["01 43 57 12 92"], "emails": ["petitconcept@9business.fr"], "source": "paris.fr", "source_url": "https://www.paris.fr/lieux/creche-associative-petit-concept-3522", "confidence": "Fiche officielle paris.fr"}, {"name": "Crèche municipale Folie Régnault", "type": "Municipale", "address": "65 Rue de la Folie-Regnault 75011 Paris", "address_src": "65 rue de la Folie Régnault, Paris 11e", "lat": 48.861753, "lon": 2.385404, "dist": 583, "phones": ["01 48 05 24 67"], "emails": [], "source": "paris.fr", "source_url": "https://www.paris.fr/lieux/creche-municipale-folie-regnault-2179", "confidence": "Fiche officielle paris.fr"}, {"name": "Crèche associative ozar hatorah", "type": "Associative", "address": "40 Rue de l'Orillon 75011 Paris", "address_src": "40 rue de l'Orillon, Paris 11e", "lat": 48.870594, "lon": 2.377859, "dist": 590, "phones": ["01 55 28 50 30"], "emails": ["contact.c11@ozar.fr"], "source": "paris.fr", "source_url": "https://www.paris.fr/lieux/creche-associative-ozar-hatorah-3521", "confidence": "Fiche officielle paris.fr"}, {"name": "Crèche associative (FOCSS) fondation œuvre de la croix saint simon", "type": "Associative", "address": "9B Rue Delaitre 75020 Paris", "address_src": "9 bis rue Delaître, Paris 20e", "lat": 48.867562, "lon": 2.387246, "dist": 599, "phones": ["01 42 55 17 52"], "emails": ["creche.leballonrouge@lafocss.org"], "source": "paris.fr", "source_url": "https://www.paris.fr/lieux/creche-associative-focss-fondation-oeuvre-de-la-croix-saint-simon-20000", "confidence": "Fiche officielle paris.fr"}, {"name": "Crèche municipale Duranti", "type": "Municipale", "address": "14 Rue Duranti 75011 Paris", "address_src": "14 rue Duranti, Paris 11e", "lat": 48.860774, "lon": 2.384616, "dist": 629, "phones": ["01 43 67 57 17"], "emails": [], "source": "paris.fr", "source_url": "https://www.paris.fr/lieux/creche-municipale-duranti-2180", "confidence": "Fiche officielle paris.fr"}, {"name": "Crèche municipale Robert Houdin", "type": "Municipale", "address": "16 Rue Robert-Houdin 75011 Paris", "address_src": "16 rue Robert Houdin, Paris 11e", "lat": 48.870833, "lon": 2.375551, "dist": 674, "phones": ["01 55 28 80 65"], "emails": [], "source": "paris.fr", "source_url": "https://www.paris.fr/lieux/creche-municipale-robert-houdin-2187", "confidence": "Fiche officielle paris.fr"}, {"name": "Crèche municipale Amandiers", "type": "Municipale", "address": "83 Rue des Amandiers 75020 Paris", "address_src": "83 rue des Amandiers, Paris 20e", "lat": 48.866474, "lon": 2.389452, "dist": 721, "phones": ["01 47 97 00 35"], "emails": [], "source": "paris.fr", "source_url": "https://www.paris.fr/lieux/creche-municipale-amandiers-2036", "confidence": "Fiche officielle paris.fr"}, {"name": "Crèche municipale Passage de l'Asile - Crescendo", "type": "Municipale", "address": "6 Passage de l'Asile 75011 Paris", "address_src": "6 passage de l'Asile , Paris 11e", "lat": 48.85968, "lon": 2.375086, "dist": 724, "phones": ["01 48 05 84 39"], "emails": ["creche.popincourt@groupe-sos.org"], "source": "paris.fr", "source_url": "https://www.paris.fr/lieux/creche-municipale-passage-de-l-asile-crescendo-19909", "confidence": "Fiche officielle paris.fr"}, {"name": "Crèche municipale Dénoyez - La Maison Bleue", "type": "Municipale", "address": "22 Rue Dénoyez 75020 Paris", "address_src": "22 rue Dénoyez, Paris 20e", "lat": 48.872099, "lon": 2.378326, "dist": 749, "phones": ["01 42 62 24 32"], "emails": ["paris20denoyez@creche-la-maison-bleue.fr"], "source": "paris.fr", "source_url": "https://www.paris.fr/lieux/creche-municipale-denoyez-la-maison-bleue-19936", "confidence": "Fiche officielle paris.fr"}, {"name": "Crèche municipale Sources du Nord", "type": "Municipale", "address": "5 Place des Sources du Nord 75020 Paris", "address_src": "5 Place des Sources du Nord, Paris 20e", "lat": 48.869262, "lon": 2.388154, "dist": 749, "phones": ["01 40 33 85 20"], "emails": [], "source": "paris.fr", "source_url": "https://www.paris.fr/lieux/creche-municipale-sources-du-nord-1969", "confidence": "Fiche officielle paris.fr"}, {"name": "Crèche municipale Moufle - Les Petits Chaperons Rouges", "type": "Municipale", "address": "14B Rue Moufle 75011 Paris", "address_src": "14 bis rue Moufle, Paris 11e", "lat": 48.860222, "lon": 2.373076, "dist": 757, "phones": ["01 47 00 70 91"], "emails": ["paris.11.moufle@lpcr.fr"], "source": "paris.fr", "source_url": "https://www.paris.fr/lieux/creche-municipale-moufle-les-petits-chaperons-rouges-17365", "confidence": "Fiche officielle paris.fr"}, {"name": "Crèche familiale associative christine augun", "type": "Associative", "address": "70 Rue des Panoyaux 75020 Paris", "address_src": "70, rue des Panoyaux, Paris 20e", "lat": 48.867432, "lon": 2.389858, "dist": 774, "phones": ["01 43 49 14 83"], "emails": ["panoyaux@enfantpresent.net"], "source": "paris.fr", "source_url": "https://www.paris.fr/lieux/creche-familiale-associative-christine-augun-20058", "confidence": "Fiche officielle paris.fr"}, {"name": "Crèche associative fondation léopold bellan", "type": "Associative", "address": "10 Impasse Saint-Sébastien 75011 Paris", "address_src": "8 10 impasse Saint Sébastien , Paris 11e", "lat": 48.861201, "lon": 2.371232, "dist": 779, "phones": ["01 43 57 07 10"], "emails": ["saintsebastien@fondationbellan.org"], "source": "paris.fr", "source_url": "https://www.paris.fr/lieux/creche-associative-fondation-leopold-bellan-19944", "confidence": "Fiche officielle paris.fr"}];
+const CENTER = [48.865431, 2.379729];
+const COLORS = { 'Municipale':'var(--municipale)', 'Associative':'var(--associative)', 'Parentale':'var(--parentale)',
+                 'Halte-garderie':'var(--halte)', 'Privée / micro-crèche':'var(--privee)' };
+const HEX = { 'Municipale':'#2a6fdb', 'Associative':'#1a9a6c', 'Parentale':'#c27c0e', 'Halte-garderie':'#8b5cf6', 'Privée / micro-crèche':'#d6336c' };
+const types = Object.keys(HEX).filter(t => DATA.some(d => d.type === t));
+const active = new Set(types);
+
+const map = L.map('map').setView(CENTER, 16);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  maxZoom: 19, attribution: '&copy; contributeurs OpenStreetMap'
+}).addTo(map);
+L.marker(CENTER, { icon: L.divIcon({ className:'', html:'<div style="font-size:26px;line-height:26px">🏠</div>', iconSize:[26,26], iconAnchor:[13,13] }) })
+  .addTo(map).bindPopup('<strong>Villa Gaudelet</strong><br>75011 Paris');
+const circle = L.circle(CENTER, { radius: 500, color:'#2a6fdb', weight:1.5, fillOpacity:0.05, dashArray:'6 4' }).addTo(map);
+
+const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const tel = p => `<a href="tel:${p.replace(/\s/g,'')}">${esc(p)}</a>`;
+const mail = m => `<a href="mailto:${esc(m)}">${esc(m)}</a>`;
+const verified = d => d.confidence.startsWith('Fiche officielle');
+
+function popup(d) {
+  return `<strong>${esc(d.name)}</strong><br><span class="badge" style="background:${HEX[d.type]}">${esc(d.type)}</span>${d.dist} m<br>
+    ${esc(d.address)}<br>
+    ${d.phones.map(tel).join(' · ') || '<em>Téléphone non trouvé</em>'}<br>
+    ${d.emails.map(mail).join('<br>') || '<em>E-mail non trouvé</em>'}<br>
+    <small>${verified(d) ? '✔ ' : '⚠ '}${esc(d.confidence)} — <a href="${esc(d.source_url)}" target="_blank" rel="noopener">source</a></small>`;
+}
+
+const markers = DATA.map(d => {
+  const m = L.circleMarker([d.lat, d.lon], { radius: 8, color:'#fff', weight:2, fillColor: HEX[d.type], fillOpacity: 0.95 })
+    .bindPopup(popup(d));
+  m.on('click', () => highlight(d));
+  return m;
+});
+
+const typesEl = document.getElementById('types');
+types.forEach(t => {
+  const c = document.createElement('label');
+  c.className = 'chip';
+  c.innerHTML = `<input type="checkbox" checked style="margin:0"><span class="dot" style="background:${HEX[t]}"></span>${t}`;
+  c.querySelector('input').addEventListener('change', e => { e.target.checked ? active.add(t) : active.delete(t); render(); });
+  typesEl.appendChild(c);
+});
+
+const radiusEl = document.getElementById('radius');
+const onlyContactEl = document.getElementById('onlyContact');
+radiusEl.addEventListener('input', render);
+onlyContactEl.addEventListener('change', render);
+
+function visible() {
+  const r = +radiusEl.value;
+  return DATA.map((d, i) => ({ d, i })).filter(({ d }) =>
+    d.dist <= r && active.has(d.type) && (!onlyContactEl.checked || d.phones.length || d.emails.length));
+}
+
+function render() {
+  const r = +radiusEl.value;
+  document.getElementById('rv').textContent = r;
+  circle.setRadius(r);
+  const vis = visible();
+  const visIdx = new Set(vis.map(v => v.i));
+  markers.forEach((m, i) => visIdx.has(i) ? m.addTo(map) : m.remove());
+  document.getElementById('count').textContent = `${vis.length} établissement${vis.length > 1 ? 's' : ''}`;
+  document.getElementById('list').innerHTML = vis.map(({ d, i }) => `
+    <li data-i="${i}">
+      <h3>${esc(d.name)}</h3>
+      <div class="meta"><span class="badge" style="background:${HEX[d.type]}">${esc(d.type)}</span>${d.dist} m · ${esc(d.address)}</div>
+      <div class="contacts">${[...d.phones.map(p => '📞 ' + tel(p)), ...d.emails.map(m => '✉️ ' + mail(m))].join('<br>') || '<span class="meta">Aucun contact public trouvé</span>'}</div>
+      ${verified(d) ? '<div class="ok">✔ Fiche officielle paris.fr</div>' : `<div class="warn">⚠ ${esc(d.confidence)}</div>`}
+    </li>`).join('');
+  document.querySelectorAll('#list li').forEach(li => li.addEventListener('click', e => {
+    if (e.target.tagName === 'A') return;
+    const i = +li.dataset.i;
+    map.setView([DATA[i].lat, DATA[i].lon], 17);
+    markers[i].openPopup();
+    highlight(DATA[i]);
+  }));
+}
+
+function highlight(d) {
+  const i = DATA.indexOf(d);
+  document.querySelectorAll('#list li').forEach(li => li.classList.toggle('active', +li.dataset.i === i));
+  const el = document.querySelector(`#list li[data-i="${i}"]`);
+  if (el) el.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+}
+
+document.getElementById('csv').addEventListener('click', () => {
+  const q = s => `"${String(s).replace(/"/g, '""')}"`;
+  const rows = [['Distance (m)','Nom','Type','Adresse','Téléphone(s)','Email(s)','Fiabilité','Source']]
+    .concat(visible().map(({ d }) => [d.dist, d.name, d.type, d.address, d.phones.join(' / '), d.emails.join(' / '), d.confidence, d.source_url]));
+  const blob = new Blob(['﻿' + rows.map(r => r.map(q).join(';')).join('\n')], { type: 'text/csv;charset=utf-8' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `creches-villa-gaudelet-${radiusEl.value}m.csv`;
+  a.click();
+});
+
+render();
+</script>
+</body>
+</html>
