@@ -36,6 +36,13 @@
   .info { font-size:11px; color:#0550ae; background:#ddf4ff; border-radius:4px; padding:2px 6px; display:inline-block; margin-top:4px; }
   .badge { font-size:11px; color:#fff; border-radius:4px; padding:1px 6px; margin-right:6px; }
   .out { opacity:.55; }
+  .note { margin-top:8px; }
+  .note textarea { width:100%; min-height:38px; resize:vertical; font:inherit; font-size:12px; padding:6px 8px; border:1px solid var(--line); border-radius:6px; background:#fffef7; }
+  .note textarea:focus { outline:2px solid #2a6fdb33; border-color:#2a6fdb; }
+  .note-meta { font-size:10px; color:var(--muted); min-height:12px; }
+  .has-note h3::after { content:' 📝'; font-size:12px; }
+  .notes-bar { display:flex; gap:6px; align-items:center; flex-wrap:wrap; font-size:11px; color:var(--muted); }
+  .popup-note { margin-top:6px; padding:4px 6px; background:#fffef7; border-left:3px solid #e3b341; font-size:12px; white-space:pre-wrap; }
   footer { padding:12px 16px; font-size:11px; color:var(--muted); }
   @media (max-width: 800px) { .layout { grid-template-columns:1fr; grid-template-rows:45vh auto; height:auto; } #map { height:45vh; order:-1; } aside { border-right:none; } }
 </style>
@@ -56,9 +63,18 @@
       <div class="row">
         <label><input type="checkbox" id="onlyContact"> Avec téléphone ou e-mail uniquement</label>
       </div>
+      <div class="row">
+        <label><input type="checkbox" id="onlyNotes"> Avec commentaire uniquement</label>
+      </div>
       <div class="row" style="justify-content:space-between">
         <span class="count" id="count"></span>
         <button id="csv">Exporter CSV</button>
+      </div>
+      <div class="notes-bar">
+        <span id="notesCount"></span>
+        <button id="notesExport" title="Télécharger une sauvegarde de vos commentaires">Sauvegarder mes notes</button>
+        <button id="notesImportBtn" title="Restaurer des commentaires depuis une sauvegarde">Importer</button>
+        <input type="file" id="notesImport" accept="application/json,.json" hidden>
       </div>
     </div>
     <ul id="list"></ul>
@@ -73,6 +89,10 @@
       Les places disponibles ne sont publiées nulle part : pour les crèches municipales et associatives conventionnées, la demande passe par le
       Relais Informations Familles de la mairie du 11e (01 53 27 11 11) ou du 20e. À titre indicatif, la commission du 11e d'octobre 2026 a attribué
       116 places pour 214 demandes (54 %). Les crèches associatives, parentales et privées s'inscrivent directement auprès de l'établissement.
+      <br><br>
+      📝 Les commentaires sont enregistrés automatiquement dans ce navigateur (stockage local) : ils restent après fermeture de la page,
+      mais ne sont visibles que sur cet appareil et ce navigateur, et disparaissent si vous effacez les données du site.
+      Utilisez « Sauvegarder mes notes » pour en garder une copie ou les transférer sur un autre appareil (bouton « Importer »).
     </footer>
   </aside>
   <div id="map"></div>
@@ -100,17 +120,44 @@ const mail = m => `<a href="mailto:${esc(m)}">${esc(m)}</a>`;
 const verified = d => /^(Fiche officielle|Liste officielle)/.test(d.confidence);
 const sirene = d => /^Établissement actif au registre SIRENE/.test(d.confidence);
 
+// --- Commentaires (stockage local du navigateur) ---
+const NOTES_KEY = 'creches-villa-gaudelet:notes:v1';
+const noteId = d => `${d.name}|${d.address}`;
+let NOTES = {};
+let storageOk = true;
+try { NOTES = JSON.parse(localStorage.getItem(NOTES_KEY) || '{}') || {}; }
+catch (e) { storageOk = false; NOTES = {}; }
+function saveNotes() {
+  try { localStorage.setItem(NOTES_KEY, JSON.stringify(NOTES)); return true; }
+  catch (e) { storageOk = false; return false; }
+}
+const getNote = d => (NOTES[noteId(d)] || {}).text || '';
+function setNote(d, text) {
+  const id = noteId(d);
+  if (text.trim()) NOTES[id] = { text, updated: new Date().toISOString(), name: d.name };
+  else delete NOTES[id];
+  return saveNotes();
+}
+const fmtDate = iso => { try { return new Date(iso).toLocaleString('fr-FR', { dateStyle:'short', timeStyle:'short' }); } catch (e) { return ''; } };
+function updateNotesCount() {
+  const n = DATA.filter(d => getNote(d)).length;
+  document.getElementById('notesCount').textContent = storageOk
+    ? `${n} commentaire${n > 1 ? 's' : ''} enregistré${n > 1 ? 's' : ''}`
+    : '⚠ Stockage local indisponible : les commentaires ne seront pas conservés';
+}
+
 function popup(d) {
   return `<strong>${esc(d.name)}</strong><br><span class="badge" style="background:${HEX[d.type]}">${esc(d.type)}</span>${d.dist} m<br>
     ${esc(d.address)}<br>
     ${d.phones.map(tel).join(' · ') || '<em>Téléphone non trouvé</em>'}<br>
     ${d.emails.map(mail).join('<br>') || '<em>E-mail non trouvé</em>'}<br>
-    <small>${verified(d) ? '✔ ' : '⚠ '}${esc(d.confidence)} — <a href="${esc(d.source_url)}" target="_blank" rel="noopener">source</a></small>`;
+    <small>${verified(d) ? '✔ ' : '⚠ '}${esc(d.confidence)} — <a href="${esc(d.source_url)}" target="_blank" rel="noopener">source</a></small>
+    ${getNote(d) ? `<div class="popup-note">📝 ${esc(getNote(d))}</div>` : ''}`;
 }
 
 const markers = DATA.map(d => {
   const m = L.circleMarker([d.lat, d.lon], { radius: 8, color:'#fff', weight:2, fillColor: HEX[d.type], fillOpacity: 0.95 })
-    .bindPopup(popup(d));
+    .bindPopup(() => popup(d));
   m.on('click', () => highlight(d));
   return m;
 });
@@ -126,13 +173,16 @@ types.forEach(t => {
 
 const radiusEl = document.getElementById('radius');
 const onlyContactEl = document.getElementById('onlyContact');
+const onlyNotesEl = document.getElementById('onlyNotes');
 radiusEl.addEventListener('input', render);
 onlyContactEl.addEventListener('change', render);
+onlyNotesEl.addEventListener('change', render);
 
 function visible() {
   const r = +radiusEl.value;
   return DATA.map((d, i) => ({ d, i })).filter(({ d }) =>
-    d.dist <= r && active.has(d.type) && (!onlyContactEl.checked || d.phones.length || d.emails.length));
+    d.dist <= r && active.has(d.type) && (!onlyContactEl.checked || d.phones.length || d.emails.length)
+    && (!onlyNotesEl.checked || getNote(d)));
 }
 
 function render() {
@@ -144,14 +194,35 @@ function render() {
   markers.forEach((m, i) => visIdx.has(i) ? m.addTo(map) : m.remove());
   document.getElementById('count').textContent = `${vis.length} établissement${vis.length > 1 ? 's' : ''}`;
   document.getElementById('list').innerHTML = vis.map(({ d, i }) => `
-    <li data-i="${i}">
+    <li data-i="${i}" class="${getNote(d) ? 'has-note' : ''}">
       <h3>${esc(d.name)}</h3>
       <div class="meta"><span class="badge" style="background:${HEX[d.type]}">${esc(d.type)}</span>${d.dist} m · ${esc(d.address)}</div>
       <div class="contacts">${[...d.phones.map(p => '📞 ' + tel(p)), ...d.emails.map(m => '✉️ ' + mail(m))].join('<br>') || '<span class="meta">Aucun contact public trouvé</span>'}</div>
       ${verified(d) ? `<div class="ok">✔ ${esc(d.confidence)}</div>` : sirene(d) ? `<div class="info">ℹ ${esc(d.confidence)}</div>` : `<div class="warn">⚠ ${esc(d.confidence)}</div>`}
+      <div class="note">
+        <textarea data-i="${i}" aria-label="Commentaire sur ${esc(d.name)}" placeholder="Commentaire (appel, visite, réponse, liste d'attente…)">${esc(getNote(d))}</textarea>
+        <div class="note-meta" id="note-meta-${i}">${getNote(d) ? 'Enregistré le ' + esc(fmtDate(NOTES[noteId(d)].updated)) : ''}</div>
+      </div>
     </li>`).join('');
+  document.querySelectorAll('#list textarea').forEach(ta => {
+    let t;
+    ta.addEventListener('input', () => {
+      const i = +ta.dataset.i, d = DATA[i];
+      const meta = document.getElementById('note-meta-' + i);
+      meta.textContent = 'Enregistrement…';
+      clearTimeout(t);
+      t = setTimeout(() => {
+        const ok = setNote(d, ta.value);
+        meta.textContent = !ok ? '⚠ Non enregistré (stockage local indisponible)'
+          : ta.value.trim() ? 'Enregistré le ' + fmtDate(NOTES[noteId(d)].updated) : 'Commentaire supprimé';
+        ta.closest('li').classList.toggle('has-note', !!ta.value.trim());
+        updateNotesCount();
+      }, 400);
+    });
+  });
+  updateNotesCount();
   document.querySelectorAll('#list li').forEach(li => li.addEventListener('click', e => {
-    if (e.target.tagName === 'A') return;
+    if (['A', 'TEXTAREA'].includes(e.target.tagName)) return;
     const i = +li.dataset.i;
     map.setView([DATA[i].lat, DATA[i].lon], 17);
     markers[i].openPopup();
@@ -168,13 +239,45 @@ function highlight(d) {
 
 document.getElementById('csv').addEventListener('click', () => {
   const q = s => `"${String(s).replace(/"/g, '""')}"`;
-  const rows = [['Distance (m)','Nom','Type','Adresse','Téléphone(s)','Email(s)','Fiabilité','Source']]
-    .concat(visible().map(({ d }) => [d.dist, d.name, d.type, d.address, d.phones.join(' / '), d.emails.join(' / '), d.confidence, d.source_url]));
+  const rows = [['Distance (m)','Nom','Type','Adresse','Téléphone(s)','Email(s)','Commentaire','Fiabilité','Source']]
+    .concat(visible().map(({ d }) => [d.dist, d.name, d.type, d.address, d.phones.join(' / '), d.emails.join(' / '), getNote(d), d.confidence, d.source_url]));
   const blob = new Blob(['﻿' + rows.map(r => r.map(q).join(';')).join('\n')], { type: 'text/csv;charset=utf-8' });
   const a = document.createElement('a');
   a.href = URL.createObjectURL(blob);
   a.download = `creches-villa-gaudelet-${radiusEl.value}m.csv`;
   a.click();
+});
+
+function download(name, text, type) {
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([text], { type }));
+  a.download = name;
+  a.click();
+}
+document.getElementById('notesExport').addEventListener('click', () => {
+  const day = new Date().toISOString().slice(0, 10);
+  download(`notes-creches-villa-gaudelet-${day}.json`, JSON.stringify({ version: 1, exported: new Date().toISOString(), notes: NOTES }, null, 2), 'application/json');
+});
+document.getElementById('notesImportBtn').addEventListener('click', () => document.getElementById('notesImport').click());
+document.getElementById('notesImport').addEventListener('change', async e => {
+  const file = e.target.files[0];
+  if (!file) return;
+  try {
+    const data = JSON.parse(await file.text());
+    const incoming = data.notes || data;
+    let added = 0;
+    for (const [id, n] of Object.entries(incoming)) {
+      if (!n || typeof n.text !== 'string') continue;
+      const cur = NOTES[id];
+      if (!cur || (n.updated || '') > (cur.updated || '')) { NOTES[id] = n; added++; }
+    }
+    saveNotes();
+    render();
+    document.getElementById('notesCount').textContent += ` · ${added} importé${added > 1 ? 's' : ''}`;
+  } catch (err) {
+    document.getElementById('notesCount').textContent = '⚠ Fichier de notes illisible';
+  }
+  e.target.value = '';
 });
 
 render();

@@ -6,6 +6,7 @@ App web autonome qui recense les crèches situées à moins de 500 m de la Villa
 - Curseur de rayon (200 à 800 m), filtres par type, filtre « avec contact »
 - Clic sur une crèche → zoom et fiche sur la carte
 - Export CSV de la sélection
+- **Commentaires** : un champ de notes sous chaque crèche, enregistré automatiquement dans le navigateur (stockage local). Les notes restent après fermeture de la page, mais uniquement sur cet appareil et ce navigateur. Le bouton « Sauvegarder mes notes » télécharge une copie (JSON) que « Importer » restaure, sur le même appareil ou un autre. Les notes figurent aussi dans l'export CSV.
 
 Fichiers : `index.html` (l'app), `creches.json` et `creches.csv` (les données, 54 établissements jusqu'à 800 m).
 
