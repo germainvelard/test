@@ -1,17 +1,17 @@
 [
  {
-  "name": "Micro-crèche (12 villa Gaudelet) – non confirmée",
+  "name": "Micro-crèche La Maison Bleue (Saint-Hubert)",
   "type": "Privée / micro-crèche",
-  "address": "12 Villa Gaudelet 75011 Paris",
-  "address_src": "12 villa Gaudelet, Paris 11e",
-  "lat": 48.865376,
-  "lon": 2.379707,
-  "dist": 6,
+  "address": "7 Rue Saint-Hubert 75011 Paris",
+  "address_src": "5-7 rue Saint-Hubert, Paris 11e",
+  "lat": 48.863921,
+  "lon": 2.379747,
+  "dist": 168,
   "phones": [],
   "emails": [],
-  "source": "trouverecole.fr (donnée SIRENE)",
-  "source_url": "https://trouverecole.fr/creches/micro-creche-paris-800071/",
-  "confidence": "Une seule source (code NAF micro-crèche, 2010). Le 12 villa Gaudelet héberge aussi le SESSAD Le Passage : existence à vérifier"
+  "source": "SIRENE",
+  "source_url": "https://annuaire-entreprises.data.gouv.fr/etablissement/80841777800020",
+  "confidence": "Établissement actif au registre SIRENE (La Maison Bleue – Micros 1) ; aucun contact public trouvé"
  },
  {
   "name": "Micro-crèche Les Explorateurs de Ménilmontant (Les Bébés Explorateurs)",
@@ -22,12 +22,13 @@
   "lon": 2.381427,
   "dist": 191,
   "phones": [
-   "07 67 82 17 51"
+   "07 67 82 17 51",
+   "0 809 10 30 00"
   ],
   "emails": [],
   "source": "People&Baby / Babilou / annuaire-entreprises",
   "source_url": "https://www.lesbebesexplorateurs.com/creche-paris-75011-menilmontant",
-  "confidence": "Téléphone : conseiller petite enfance People&Baby (pré-inscription), pas la crèche directement"
+  "confidence": "Établissement actif au registre SIRENE (Crecheo) ; téléphones = services familles People&Baby et Babilou (pas la crèche directement)"
  },
  {
   "name": "Le Lagon des Ours (ABC Puériculture)",
@@ -100,6 +101,24 @@
   "confidence": "Adresse confirmée par la mairie du 11e ; téléphone issu d'un annuaire tiers (evous.fr), à vérifier"
  },
  {
+  "name": "Les Malicieux de Saint-Maur (Les Petits Chaperons Rouges)",
+  "type": "Privée / micro-crèche",
+  "address": "10 Passage de la Fonderie 75011 Paris",
+  "address_src": "10 passage de la Fonderie, Paris 11e",
+  "lat": 48.866088,
+  "lon": 2.375848,
+  "dist": 293,
+  "phones": [
+   "01 41 40 81 79"
+  ],
+  "emails": [
+   "familles@lpcr.fr"
+  ],
+  "source": "SIRENE",
+  "source_url": "https://annuaire-entreprises.data.gouv.fr/etablissement/52857022901326",
+  "confidence": "Établissement actif au registre SIRENE ; contact = service familles national LPCR (document ancien, à vérifier)"
+ },
+ {
   "name": "Les Nouvelles Crèches – Jean-Pierre Timbaud",
   "type": "Privée / micro-crèche",
   "address": "77 Rue Jean-Pierre Timbaud 75011 Paris",
@@ -107,11 +126,13 @@
   "lat": 48.867657,
   "lon": 2.377057,
   "dist": 315,
-  "phones": [],
+  "phones": [
+   "0 809 10 30 00"
+  ],
   "emails": [],
-  "source": "Babilou (annuaire réseau) / SIRENE",
-  "source_url": "https://www.babilou.fr/ile-de-france/paris/paris11",
-  "confidence": "Adresse confirmée ; aucun contact public trouvé (siège : 13 rue du Chemin Vert)"
+  "source": "Babilou + SIRENE",
+  "source_url": "https://www.babilou.fr/creches/les-nouvelles-creches-jean-pierre-timbaud-paris-11",
+  "confidence": "Établissement actif au registre SIRENE + annuaire Babilou ; téléphone = service familles Babilou (pas la crèche directement)"
  },
  {
   "name": "Crèche municipale Jean-Pierre Timbaud (81 bis rue Jean-Pierre Timbaud)",
@@ -162,6 +183,24 @@
   "confidence": "Fiche officielle paris.fr"
  },
  {
+  "name": "Les Petits Chaperons Rouges Paris 20 Ménilmontant",
+  "type": "Privée / micro-crèche",
+  "address": "120 Boulevard de Ménilmontant 75020 Paris",
+  "address_src": "120 boulevard de Ménilmontant, Paris 20e",
+  "lat": 48.865801,
+  "lon": 2.384577,
+  "dist": 357,
+  "phones": [
+   "01 41 40 81 79"
+  ],
+  "emails": [
+   "familles@lpcr.fr"
+  ],
+  "source": "SIRENE",
+  "source_url": "https://annuaire-entreprises.data.gouv.fr/etablissement/45345601401058",
+  "confidence": "Établissement actif au registre SIRENE ; contact = service familles national LPCR (document ancien, à vérifier)"
+ },
+ {
   "name": "Crèche associative Heikhal Menahem",
   "type": "Associative",
   "address": "110 Boulevard de Ménilmontant 75020 Paris",
@@ -174,6 +213,24 @@
   "source": "paris.fr (fiche retirée)",
   "source_url": "https://www.paris.fr/lieux/creche-associative-heikhal-menahem-3570",
   "confidence": "Adresse 110-114 bd de Ménilmontant ; aucun contact trouvé"
+ },
+ {
+  "name": "Les Malicieux de Lacharrière (Les Petits Chaperons Rouges)",
+  "type": "Privée / micro-crèche",
+  "address": "9 Rue Lacharrière 75011 Paris",
+  "address_src": "9 rue Lacharrière, Paris 11e",
+  "lat": 48.862129,
+  "lon": 2.378221,
+  "dist": 383,
+  "phones": [
+   "01 41 40 81 79"
+  ],
+  "emails": [
+   "familles@lpcr.fr"
+  ],
+  "source": "SIRENE",
+  "source_url": "https://annuaire-entreprises.data.gouv.fr/etablissement/52857022901094",
+  "confidence": "Établissement actif au registre SIRENE ; contact = service familles national LPCR (document ancien, à vérifier)"
  },
  {
   "name": "Mini-crèche coccinelle",
@@ -212,6 +269,24 @@
   "confidence": "Fiche officielle paris.fr"
  },
  {
+  "name": "Les Petits Chaperons Rouges Paris 11 Servan",
+  "type": "Privée / micro-crèche",
+  "address": "40 Rue Servan 75011 Paris",
+  "address_src": "40 rue Servan, Paris 11e",
+  "lat": 48.862071,
+  "lon": 2.382397,
+  "dist": 422,
+  "phones": [
+   "01 41 40 81 79"
+  ],
+  "emails": [
+   "familles@lpcr.fr"
+  ],
+  "source": "SIRENE",
+  "source_url": "https://annuaire-entreprises.data.gouv.fr/etablissement/84095275800273",
+  "confidence": "Établissement actif au registre SIRENE ; contact = service familles national LPCR (document ancien, à vérifier)"
+ },
+ {
   "name": "Crèche associative saint ambroise",
   "type": "Associative",
   "address": "19 Rue Pasteur 75011 Paris",
@@ -228,6 +303,40 @@
   "source": "paris.fr",
   "source_url": "https://www.paris.fr/lieux/creche-associative-saint-ambroise-16686",
   "confidence": "Fiche officielle paris.fr"
+ },
+ {
+  "name": "Micro-crèche Les Explorateurs de Saint-Ambroise",
+  "type": "Privée / micro-crèche",
+  "address": "17 Rue Pasteur 75011 Paris",
+  "address_src": "17 rue Pasteur, Paris 11e",
+  "lat": 48.862442,
+  "lon": 2.375882,
+  "dist": 435,
+  "phones": [
+   "0 809 10 30 00"
+  ],
+  "emails": [],
+  "source": "Babilou + SIRENE",
+  "source_url": "https://www.babilou.fr/creches/les-explorateurs-de-saint-ambroise-paris-11",
+  "confidence": "Établissement actif au registre SIRENE + annuaire Babilou ; téléphone = service familles Babilou (pas la crèche directement)"
+ },
+ {
+  "name": "Les Petits Chaperons Rouges Paris 11 Moulin Joly (Bio Crèche République)",
+  "type": "Privée / micro-crèche",
+  "address": "17 Rue du Moulin Joly 75011 Paris",
+  "address_src": "17 rue du Moulin Joly, Paris 11e",
+  "lat": 48.869273,
+  "lon": 2.37859,
+  "dist": 435,
+  "phones": [
+   "01 41 40 81 79"
+  ],
+  "emails": [
+   "familles@lpcr.fr"
+  ],
+  "source": "SIRENE",
+  "source_url": "https://annuaire-entreprises.data.gouv.fr/etablissement/53378615800022",
+  "confidence": "Établissement actif au registre SIRENE ; contact = service familles national LPCR (document ancien, à vérifier)"
  },
  {
   "name": "Halte-garderie associative Suzanne et David Lévy",
@@ -296,20 +405,20 @@
   "confidence": "Liste officielle mairie du 11e"
  },
  {
-  "name": "Crescendo Spinoza",
+  "name": "Multi-accueil Crescendo Spinoza",
   "type": "Associative",
-  "address": "81 Boulevard de Ménilmontant 75011 Paris",
+  "address": "6 rue Spinoza (angle 81 bd de Ménilmontant) 75011 Paris",
   "address_src": "81 boulevard de Ménilmontant, Paris 11e",
-  "lat": 48.863776,
-  "lon": 2.386135,
-  "dist": 503,
+  "lat": 48.863706,
+  "lon": 2.385927,
+  "dist": 492,
   "phones": [
    "01 53 02 93 41"
   ],
   "emails": [
    "creche.spinoza@groupe-sos.org"
   ],
-  "source": "mairie11.paris.fr",
+  "source": "mairie11.paris.fr + SIRENE",
   "source_url": "https://mairie11.paris.fr/pages/les-structures-associatives-9813",
   "confidence": "Liste officielle mairie du 11e"
  },
@@ -321,11 +430,13 @@
   "lat": 48.861914,
   "lon": 2.375025,
   "dist": 521,
-  "phones": [],
+  "phones": [
+   "0 809 10 30 00"
+  ],
   "emails": [],
   "source": "Babilou",
-  "source_url": "https://www.babilou.fr/ile-de-france/paris/paris11",
-  "confidence": "Juste au-delà de 500 m ; contact via le site Babilou"
+  "source_url": "https://www.babilou.fr/creches/babilou-paris-pasteur",
+  "confidence": "Établissement actif au registre SIRENE + annuaire Babilou ; téléphone = service familles Babilou (pas la crèche directement)"
  },
  {
   "name": "Crèche municipale Vaucouleurs – Crescendo",
@@ -340,6 +451,36 @@
   "source": "mairie11.paris.fr",
   "source_url": "https://mairie11.paris.fr/pages/les-structures-municipales-9812",
   "confidence": "Liste officielle mairie du 11e ; pas de téléphone direct publié (inscription via la mairie)"
+ },
+ {
+  "name": "La Cabane de Saint-Ambroise",
+  "type": "Privée / micro-crèche",
+  "address": "12 Rue de la Folie-Méricourt 75011 Paris",
+  "address_src": "12 rue de la Folie-Méricourt, Paris 11e",
+  "lat": 48.861938,
+  "lon": 2.374303,
+  "dist": 555,
+  "phones": [
+   "0 809 10 30 00"
+  ],
+  "emails": [],
+  "source": "Babilou + SIRENE",
+  "source_url": "https://www.babilou.fr/creches/cabane-de-saint-ambroise",
+  "confidence": "Établissement actif au registre SIRENE + annuaire Babilou ; téléphone = service familles Babilou (pas la crèche directement)"
+ },
+ {
+  "name": "Union familiale d'éducation populaire (accueil petite enfance)",
+  "type": "Associative",
+  "address": "161 Rue Saint-Maur 75011 Paris",
+  "address_src": "161 rue Saint-Maur, Paris 11e",
+  "lat": 48.868965,
+  "lon": 2.374294,
+  "dist": 559,
+  "phones": [],
+  "emails": [],
+  "source": "SIRENE",
+  "source_url": "https://annuaire-entreprises.data.gouv.fr/etablissement/78449044300024",
+  "confidence": "Établissement actif au registre SIRENE (code accueil de jeunes enfants) ; nature exacte à vérifier"
  },
  {
   "name": "Crèche associative mosaïque l'atelier des enfants",
@@ -358,6 +499,20 @@
   "source": "paris.fr",
   "source_url": "https://www.paris.fr/lieux/creche-associative-mosaique-l-atelier-des-enfants-1949",
   "confidence": "Fiche officielle paris.fr"
+ },
+ {
+  "name": "Halte-garderie Gribouille",
+  "type": "Halte-garderie",
+  "address": "7 Rue Gambey 75011 Paris",
+  "address_src": "7 rue Gambey, Paris 11e",
+  "lat": 48.864914,
+  "lon": 2.372013,
+  "dist": 567,
+  "phones": [],
+  "emails": [],
+  "source": "SIRENE",
+  "source_url": "https://annuaire-entreprises.data.gouv.fr/etablissement/33266272500032",
+  "confidence": "Établissement actif au registre SIRENE (association) ; aucun contact public trouvé"
  },
  {
   "name": "Crèche associative petit concept",
@@ -430,6 +585,20 @@
   "confidence": "Fiche officielle paris.fr"
  },
  {
+  "name": "Halte-garderie Méli-Mélo (Crescendo)",
+  "type": "Halte-garderie",
+  "address": "3 Place Alphonse Allais 75020 Paris",
+  "address_src": "3 place Alphonse Allais, Paris 20e",
+  "lat": 48.870771,
+  "lon": 2.381937,
+  "dist": 615,
+  "phones": [],
+  "emails": [],
+  "source": "SIRENE",
+  "source_url": "https://annuaire-entreprises.data.gouv.fr/etablissement/78481011100541",
+  "confidence": "Établissement actif au registre SIRENE ; aucun contact public trouvé"
+ },
+ {
   "name": "Crèche municipale Duranti",
   "type": "Municipale",
   "address": "14 Rue Duranti 75011 Paris",
@@ -444,6 +613,38 @@
   "source": "paris.fr",
   "source_url": "https://www.paris.fr/lieux/creche-municipale-duranti-2180",
   "confidence": "Fiche officielle paris.fr"
+ },
+ {
+  "name": "Baby Bulles de Vie Voltaire",
+  "type": "Privée / micro-crèche",
+  "address": "86 Boulevard Voltaire 75011 Paris",
+  "address_src": "86 boulevard Voltaire, Paris 11e",
+  "lat": 48.860584,
+  "lon": 2.375125,
+  "dist": 636,
+  "phones": [
+   "0 809 10 30 00"
+  ],
+  "emails": [],
+  "source": "Babilou + SIRENE",
+  "source_url": "https://www.babilou.fr/creches/baby-bulles-de-vie-voltaire",
+  "confidence": "Établissement actif au registre SIRENE + annuaire Babilou ; téléphone = service familles Babilou (pas la crèche directement)"
+ },
+ {
+  "name": "Crèche parentale Balustrade",
+  "type": "Parentale",
+  "address": "39 Cité Industrielle 75011 Paris",
+  "address_src": "39 cité Industrielle, Paris 11e",
+  "lat": 48.859651,
+  "lon": 2.380046,
+  "dist": 643,
+  "phones": [
+   "01 43 70 22 11"
+  ],
+  "emails": [],
+  "source": "mairie11.paris.fr + SIRENE",
+  "source_url": "https://mairie11.paris.fr/pages/les-structures-associatives-9813",
+  "confidence": "Liste officielle mairie du 11e"
  },
  {
   "name": "L'Atelier des Ours (ABC Puériculture)",
@@ -478,6 +679,48 @@
   "source": "paris.fr",
   "source_url": "https://www.paris.fr/lieux/creche-municipale-robert-houdin-2187",
   "confidence": "Fiche officielle paris.fr"
+ },
+ {
+  "name": "Brin de Folie (People&Baby)",
+  "type": "Privée / micro-crèche",
+  "address": "66 Rue de la Folie-Regnault 75011 Paris",
+  "address_src": "66 rue de la Folie-Regnault, Paris 11e",
+  "lat": 48.860805,
+  "lon": 2.386147,
+  "dist": 696,
+  "phones": [],
+  "emails": [],
+  "source": "SIRENE",
+  "source_url": "https://annuaire-entreprises.data.gouv.fr/etablissement/47918275001293",
+  "confidence": "Établissement actif au registre SIRENE ; contact via people-and-baby.com"
+ },
+ {
+  "name": "Jardin d'enfants Notre-Dame du Perpétuel Secours",
+  "type": "Associative",
+  "address": "55 Boulevard de Ménilmontant 75011 Paris",
+  "address_src": "55 boulevard de Ménilmontant, Paris 11e",
+  "lat": 48.861806,
+  "lon": 2.38767,
+  "dist": 707,
+  "phones": [],
+  "emails": [],
+  "source": "SIRENE",
+  "source_url": "https://annuaire-entreprises.data.gouv.fr/etablissement/78449264700010",
+  "confidence": "Établissement actif au registre SIRENE ; fiche paris.fr retirée ; aucun contact public trouvé"
+ },
+ {
+  "name": "Alpha Baby",
+  "type": "Associative",
+  "address": "5 Rue Auguste Barbier 75011 Paris",
+  "address_src": "5 rue Auguste Barbier, Paris 11e",
+  "lat": 48.868634,
+  "lon": 2.371289,
+  "dist": 713,
+  "phones": [],
+  "emails": [],
+  "source": "SIRENE",
+  "source_url": "https://annuaire-entreprises.data.gouv.fr/etablissement/38913049300015",
+  "confidence": "Établissement actif au registre SIRENE (association) ; aucun contact public trouvé"
  },
  {
   "name": "Crèche municipale Amandiers",
@@ -564,6 +807,22 @@
   "confidence": "Fiche officielle paris.fr"
  },
  {
+  "name": "La Maison Kangourou Faubourg du Temple",
+  "type": "Associative",
+  "address": "129 Rue du Faubourg du Temple 75010 Paris",
+  "address_src": "129 rue du Faubourg du Temple, Paris 10e",
+  "lat": 48.871638,
+  "lon": 2.37557,
+  "dist": 754,
+  "phones": [
+   "07 77 93 00 14"
+  ],
+  "emails": [],
+  "source": "SIRENE + mairie11.paris.fr",
+  "source_url": "https://mairie11.paris.fr/pages/les-structures-associatives-9813",
+  "confidence": "Établissement actif au registre SIRENE ; téléphone commun du réseau Maison Kangourou (liste mairie du 11e)"
+ },
+ {
   "name": "Crèche municipale Moufle - Les Petits Chaperons Rouges",
   "type": "Municipale",
   "address": "14B Rue Moufle 75011 Paris",
@@ -616,5 +875,21 @@
   "source": "paris.fr",
   "source_url": "https://www.paris.fr/lieux/creche-associative-fondation-leopold-bellan-19944",
   "confidence": "Fiche officielle paris.fr"
+ },
+ {
+  "name": "La Cabane de Goncourt/Parmentier",
+  "type": "Privée / micro-crèche",
+  "address": "23 Rue de la Pierre Levée 75011 Paris",
+  "address_src": "23 rue de la Pierre Levée, Paris 11e",
+  "lat": 48.868182,
+  "lon": 2.369834,
+  "dist": 786,
+  "phones": [
+   "0 809 10 30 00"
+  ],
+  "emails": [],
+  "source": "Babilou + SIRENE",
+  "source_url": "https://www.babilou.fr/creches/la-cabane-de-goncourtparmentier-paris-11",
+  "confidence": "Établissement actif au registre SIRENE + annuaire Babilou ; téléphone = service familles Babilou (pas la crèche directement)"
  }
 ]
